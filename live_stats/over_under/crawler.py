@@ -52,6 +52,24 @@ test_data = {
           "full_name": "Utah Jazz",
           "abbr": "UTA"
         }
+      },
+      "gameodds": {
+        "nba.g.2021022815": {
+          "101": {
+            "book_id": "99",
+            "book_name": "BetMGM",
+            "away_ml": "480",
+            "home_ml": "-660",
+            "away_spread": "11.5",
+            "away_line": "-110",
+            "home_spread": "-11.5",
+            "home_line": "-110",
+            "total": 200.5,
+            "over_line": "-110",
+            "under_line": "-110",
+            "last_update": "0"
+          }
+        }
       }
     }
   }
@@ -70,10 +88,11 @@ class Crawler:
       nba_results = requests.get(NBA_URL).json()
       nba_games = nba_results["service"]["scoreboard"]["games"]
       nba_teams = nba_results["service"]["scoreboard"]["teams"]
+      nba_odds = nba_results["service"]["scoreboard"]["gameodds"]
 
-      for k,v in nba_games.items():
-        if v["status_type"] == "status.type.in_progress":
-          stats = self.parser.parse(v, nba_games, nba_teams)
+      for game_id, game_stats in nba_games.items():
+        if game_stats["status_type"] == "status.type.in_progress":
+          stats = self.parser.parse(game_stats, game_id, nba_games, nba_teams, nba_odds)
           game_update = self.stats.update(stats)
 
           if game_update:

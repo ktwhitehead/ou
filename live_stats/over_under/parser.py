@@ -26,7 +26,7 @@ class Parser:
 
     return (total_seconds_elapsed, (NBA_TOTAL_TIME * 60) - total_seconds_elapsed)
 
-  def parse(self, game_stats, nba_games, nba_teams):
+  def parse(self, game_stats, game_id, nba_games, nba_teams, nba_odds):
     current_period = int(game_stats["current_period_id"])
     display_time = game_stats["status_display_name"]
     away_points = int(game_stats["total_away_points"])
@@ -41,6 +41,8 @@ class Parser:
 
     time_elapsed, time_remaining = self.parse_nba_time(display_time, current_period)
 
+    over_under = nba_odds[game_id].get("101")["total"]
+
     home_team_average_points = NBA_AVERAGES[home_team_name]
     away_team_average_points = NBA_AVERAGES[away_team_name]
     total_average_points = home_team_average_points + away_team_average_points
@@ -48,5 +50,5 @@ class Parser:
     average_points_per_minute = total_points / (time_elapsed / 60)
     projected_points = ((time_remaining / 60) * average_points_per_minute) + total_points
 
-    data = { "game": game_display, "total_points": total_points, "projected_points": projected_points, "time_elapsed": time_elapsed, "average_points": total_average_points }
+    data = { "game": game_display, "total_points": total_points, "projected_points": projected_points, "time_elapsed": time_elapsed, "average_points": total_average_points, "over_under": over_under }
     return data
