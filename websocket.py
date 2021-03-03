@@ -14,6 +14,8 @@ class WebSocket:
         async for message in websocket:
           for conn in self.connected:
             await conn.send('bla')
+      except websockets.ConnectionClosed:
+        self.connected.remove(websocket)
       finally:
         # Unregister.
         self.connected.remove(websocket)
@@ -29,7 +31,7 @@ class WebSocket:
   def start(self):
     new_loop = asyncio.new_event_loop()
 
-    start_server = websockets.serve(self.server, "172.19.229.37", 5000, loop=new_loop)
+    start_server = websockets.serve(self.server, "192.168.145.182", 5000, loop=new_loop)
 
     t = Thread(target=self.start_loop, args=(new_loop, start_server))
     t.start()

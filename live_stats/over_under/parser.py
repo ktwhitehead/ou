@@ -48,7 +48,7 @@ class Parser:
     total_average_points = home_team_average_points + away_team_average_points
 
     average_points_per_minute = total_points / (time_elapsed / 60)
-    projected_points = ((time_remaining / 60) * average_points_per_minute) + total_points
+    projected_points = ((time_remaining / 60) * average_points_per_minute) + total_points if average_points_per_minute != 0 else 0
 
     data = { "game": game_display, "total_points": total_points, "projected_points": projected_points, "time_elapsed": time_elapsed, "average_points": total_average_points, "over_under": over_under }
     return data
