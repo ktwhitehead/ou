@@ -31,7 +31,7 @@ class WebSocket:
   def start(self):
     new_loop = asyncio.new_event_loop()
 
-    start_server = websockets.serve(self.server, "192.168.145.182", 5000, loop=new_loop)
+    start_server = websockets.serve(self.server, "192.168.68.101", 5000, loop=new_loop)
 
     t = Thread(target=self.start_loop, args=(new_loop, start_server))
     t.start()
